@@ -1,0 +1,138 @@
+# Global Cursor Rules - Nick Boyce
+
+## Agent Task Workflow
+
+When asked to work on a task, pick up the next task, or start development, follow this workflow:
+
+### Step 1: Fetch the Next Task
+
+1. Search Notion for tasks in the current project
+2. **Primary**: Get the first task with Status = "Prioritised"
+3. **Fallback**: If no Prioritised tasks, get the first task with Status = "Backlog"
+4. Read the full task content from Notion
+
+To identify the current project:
+- Check the workspace's `claude.md` for project context and Notion IDs
+- If not specified, ask the user which project to work on
+
+### Step 2: Evaluate Scope Readiness
+
+Before implementing, evaluate whether the task is ready to build.
+
+**Ready to implement** if it has:
+- Clear description of what needs to be built
+- Defined acceptance criteria or success conditions
+- Enough technical context to start coding
+- No ambiguous decisions that could lead to rework
+
+**Needs refinement** if:
+- Task page is blank or contains only a title
+- Requirements are vague (e.g., "make it better", "improve performance")
+- Missing key decisions (which approach, which library, which API)
+- Dependencies on other work are unclear
+- Success criteria are undefined
+
+### Step 3: Refine Scope (If Needed)
+
+When a task needs refinement:
+
+1. **Ask specific questions** - Limit to 1-3 actionable questions at a time
+2. **Wait for answers** - Don't assume or guess
+3. **Update Notion** - Add the refined scope to the task page with clear sections:
+   - Overview
+   - Requirements
+   - Acceptance Criteria
+   - Implementation Notes (if relevant)
+4. **Re-evaluate** - Confirm scope is now clear before proceeding
+
+Example questions to ask:
+- "What specific behavior should this feature have?"
+- "Are there any constraints or preferences for the implementation approach?"
+- "What does success look like? How will we know this is done?"
+- "Are there dependencies on other tasks or external systems?"
+
+### Step 4: Start Development
+
+Once scope is confirmed:
+
+1. **Update task status** - Set to "In progress" in Notion
+2. **Create feature branch** - Use naming convention: `feature/<task-slug>`
+   - Example: `feature/implement-opentelemetry`
+   - Keep slugs lowercase with hyphens
+3. **Implement the task** - Follow the project's coding standards
+4. **Commit regularly** - Reference the task title in commit messages
+
+### Step 5: Quality Gates (CRITICAL)
+
+Before creating a PR, you MUST:
+
+1. **Run all tests** - Execute the project's test suite (e.g., `pytest`)
+2. **All tests must pass** - Zero failures required
+3. **Fix any failures** - If tests fail, fix them before proceeding
+4. **Check linting** - Ensure no new linter errors introduced
+
+Do NOT create a PR until all tests pass. This is non-negotiable.
+
+### Step 6: Create Pull Request
+
+When tests pass:
+
+1. **Push the branch** - `git push -u origin HEAD`
+2. **Create PR** - Use `gh pr create` with:
+   - Title matching the task name
+   - Body with summary and test plan
+3. **Update Notion** - Set task status to "Reviewing"
+4. **Link PR** - Add the PR URL to the task in Notion (as a comment or in the description)
+
+### PR Format
+
+## Summary
+<1-3 bullet points describing what was done>
+
+## Test plan
+- [ ] All existing tests pass
+- [ ] <specific test scenarios for this change>
+
+---
+
+## App Restarts and Verification
+
+NEVER ask the user to restart an app or service. Instead:
+
+1. **Do it yourself** - Kill the process and restart it
+2. **Verify it starts** - Check the output for errors
+3. **Confirm success** - Only report back once the app is running without errors
+4. **If it fails** - Fix the issue and try again, don't ask the user to intervene
+
+This applies to dev servers, background processes, Docker containers, and any other services.
+
+---
+
+## Git Best Practices
+
+- Work on feature branches, not main
+- Run tests before every commit
+- Write clear commit messages that reference the task
+- Don't force push to shared branches
+- Create PRs for all changes, even small ones
+
+---
+
+## Communication Style
+
+- Be direct and concise
+- Ask clarifying questions early rather than assuming
+- Update the user on progress at natural checkpoints
+- If stuck, explain what's blocking and ask for guidance
+
+---
+
+## Project Context
+
+Each project may have its own `claude.md` or `.cursorrules` in the project root with:
+- Project-specific Notion IDs and data sources
+- Custom test commands or deployment steps
+- Tech stack and architecture notes
+- Coding conventions specific to that project
+
+Always check for and follow project-specific rules in addition to these global rules.
