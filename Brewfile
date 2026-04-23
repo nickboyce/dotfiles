@@ -4,15 +4,14 @@
 
 cask_args appdir: '/Applications'
 
-# Taps
-tap 'homebrew/bundle'
-
 # CLI tools
 brew 'cloudflared'
 brew 'ffmpeg'
 brew 'gh'
 brew 'git'
+brew 'googleworkspace-cli'
 brew 'imagemagick'
+brew 'mas'
 brew 'python@3.12'
 brew 'render'
 
@@ -39,9 +38,7 @@ cask 'slack'
 cask 'spotify'
 cask 'zoom'
 
-# Mac App Store apps (requires `mas` and being signed in to the App Store)
+# Mac App Store apps (requires being signed in to the App Store)
 mas 'Spokenly',        id: 6740315592
 mas 'Toggl Track',     id: 1291898086
 mas 'WhatsApp',        id: 310633997
-
-# VS Code / Cursor extensions
