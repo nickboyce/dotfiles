@@ -12,7 +12,7 @@ brew 'git'
 brew 'googleworkspace-cli'
 brew 'imagemagick'
 brew 'mas'
-brew 'python@3.12'
+brew 'python@3.13'
 brew 'render'
 
 # GUI apps
