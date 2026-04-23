@@ -41,24 +41,41 @@ There's a few special files in the hierarchy.
 
 ## install
 
-Run this:
+### Fresh Mac (one-liner)
+
+Paste this into Terminal on a new Mac to install Homebrew, clone this repo, and run the full setup:
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
+eval "$(/opt/homebrew/bin/brew shellenv)" && \
+git clone https://github.com/nickboyce/dotfiles.git ~/.dotfiles && \
+cd ~/.dotfiles && \
+script/bootstrap && \
+script/install
+```
+
+What each step does:
+
+1. Installs Homebrew (also pulls Xcode Command Line Tools).
+2. Puts `brew` on `PATH` for the current shell session.
+3. Clones this repo to `~/.dotfiles`.
+4. `script/bootstrap` — symlinks all `*.symlink` files into `$HOME` (gitconfig, zshrc, cursorrules, etc.).
+5. `script/install` — runs `brew bundle` (installs everything in the `Brewfile`) and any topic-level `install.sh` scripts.
+
+### Already have Homebrew?
 
 ```sh
 git clone git@github.com:nickboyce/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 script/bootstrap
+script/install
 ```
 
-This will symlink the appropriate files in `.dotfiles` to your home directory.
-Everything is configured and tweaked within `~/.dotfiles`.
+### Notes
 
-The main file you'll want to change right off the bat is `zsh/zshrc.symlink`,
-which sets up a few paths that'll be different on your particular machine.
-
-`dot` is a simple script that installs some dependencies, sets sane macOS
-defaults, and so on. Tweak this script, and occasionally run `dot` from
-time to time to keep your environment fresh and up-to-date. You can find
-this script in `bin/`.
+- The main file you'll want to change right off the bat is `zsh/zshrc.symlink`, which sets up a few paths that'll be different on your particular machine.
+- `Brewfile` is where CLI tools, GUI apps (casks), Mac App Store apps (via `mas`), and VS Code/Cursor extensions are declared. Run `brew bundle install` to sync.
+- `bin/dot` is a simple script that installs some dependencies, sets sane macOS defaults, and so on. Run it occasionally to keep your environment fresh.
 
 ## bugs
 
