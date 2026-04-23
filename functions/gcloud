@@ -1,7 +1,0 @@
-# Auto-switch gcloud config based on directory
-function cd() {
-  builtin cd "$@"
-  if [[ -f .gcloud-config ]]; then
-    gcloud config configurations activate $(cat .gcloud-config) 2>/dev/null
-  fi
-}
