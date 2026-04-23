@@ -32,11 +32,9 @@ cask 'google-drive'
 cask 'loom'
 cask 'notion'
 cask 'notion-calendar'
-cask 'notion-mail'
 cask 'raycast'
 cask 'slack'
 cask 'spotify'
-cask 'zoom'
 
 # Mac App Store apps (requires being signed in to the App Store)
 mas 'Spokenly',        id: 6740315592
