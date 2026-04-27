@@ -4,6 +4,17 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Wire ~/.gitconfig to include this repo's gitconfig (which holds user identity).
+GITCONFIG_PATH="$SCRIPT_DIR/gitconfig"
+if git config --global --get-all include.path 2>/dev/null | grep -qF "$GITCONFIG_PATH"; then
+  echo "git include.path already pointing at $GITCONFIG_PATH — skipping."
+else
+  git config --global --add include.path "$GITCONFIG_PATH"
+  echo "Registered $GITCONFIG_PATH as a git include."
+fi
+
 ZSHRC="$HOME/.zshrc"
 START="# >>> dotfiles: shell setup >>>"
 END="# <<< dotfiles: shell setup <<<"
