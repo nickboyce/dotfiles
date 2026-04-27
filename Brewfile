@@ -5,6 +5,7 @@
 cask_args appdir: '/Applications'
 
 # CLI tools
+cask 'claude-code'
 brew 'cloudflared'
 brew 'ffmpeg'
 brew 'gh'
