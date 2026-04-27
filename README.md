@@ -11,8 +11,11 @@ Paste this into Terminal. It installs Homebrew (which also installs Xcode Comman
 eval "$(/opt/homebrew/bin/brew shellenv)" && \
 git clone https://github.com/nickboyce/dotfiles.git ~/.dotfiles && \
 cd ~/.dotfiles && \
-brew bundle install
+brew bundle install && \
+./post-install.sh
 ```
+
+`post-install.sh` covers anything Homebrew can't do itself — currently just adding Homebrew's Python to your shell `PATH` so `python` / `python3` resolve to it instead of Apple's bundled 3.9.
 
 You'll need to:
 

@@ -1,0 +1,30 @@
+#!/bin/bash
+# Setup that the Brewfile can't do on its own.
+# Run after `brew bundle install`.
+
+set -euo pipefail
+
+ZSHRC="$HOME/.zshrc"
+START="# >>> dotfiles: shell setup >>>"
+END="# <<< dotfiles: shell setup <<<"
+
+if [ -f "$ZSHRC" ] && grep -qF "$START" "$ZSHRC"; then
+  echo "Shell setup block already in ~/.zshrc — skipping."
+else
+  cat >> "$ZSHRC" <<EOF
+
+$START
+# Make python / python3 / pip / pip3 resolve to Homebrew's python@3.14
+# instead of Apple's bundled Python 3.9.
+# libexec/bin gives us unversioned \`python\` and \`pip\`; the aliases cover
+# \`python3\` / \`pip3\`, which Homebrew only ships as versioned binaries.
+export PATH="/opt/homebrew/opt/python@3.14/libexec/bin:\$PATH"
+alias python3=python3.14
+alias pip3=pip3.14
+
+alias cc=claude
+$END
+EOF
+  echo "Added shell setup block to ~/.zshrc."
+  echo "Open a new terminal (or run \`source ~/.zshrc\`) to pick it up."
+fi
