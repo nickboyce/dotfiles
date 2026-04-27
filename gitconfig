@@ -1,5 +1,0 @@
-# Pulled into ~/.gitconfig via `include.path`, wired up by post-install.sh.
-
-[user]
-	name = Nick Boyce
-	email = nick@trampoline.agency

@@ -1,12 +1,11 @@
 # dotfiles
 
-Captures all the apps, CLI tools, git identity, and shell tweaks on Nick's Mac, so a fresh Mac can be brought up to the same state with one command.
+Captures all the apps, CLI tools, and shell tweaks on Nick's Mac, so a fresh Mac can be brought up to the same state with one command.
 
 ## What's in here
 
 - **`Brewfile`** — every Homebrew formula, cask, and Mac App Store app that should be installed.
-- **`gitconfig`** — git `[user]` identity, pulled into `~/.gitconfig` via `include.path`.
-- **`post-install.sh`** — wires the gitconfig include into `~/.gitconfig` and adds a managed block to `~/.zshrc` (PATH for `python@3.14`, plus `python3` / `pip3` / `cc` aliases). Idempotent — safe to re-run.
+- **`post-install.sh`** — sets the global git identity (from env vars) and adds a managed block to `~/.zshrc` (PATH for `python@3.14`, plus `python3` / `pip3` / `cc` aliases). Idempotent — safe to re-run.
 
 ## Setting up a new Mac
 
@@ -19,6 +18,7 @@ Each step below is idempotent. An agent can run them top-to-bottom; a human can 
   - DaVinci Resolve — https://www.blackmagicdesign.com/products/davinciresolve
   - Blackmagic RAW Player + Proxy Generator (bundled with the Resolve installer)
   - Google Docs / Sheets / Slides — auto-installed by Google Drive once it's running
+- **Git identity.** `post-install.sh` needs `GIT_NAME` and `GIT_EMAIL` env vars on first run (skipped if global git identity is already set). **Agents: ask the human for these before running step 4.**
 
 ### 1. Install Homebrew (skip if already installed)
 
@@ -43,14 +43,17 @@ brew bundle install
 ### 4. Run post-install
 
 ```sh
-./post-install.sh
+GIT_NAME='Your Name' GIT_EMAIL='you@example.com' ./post-install.sh
 ```
+
+(Omit the env vars if global git identity is already set on this Mac.)
 
 ### 5. Verify
 
 ```sh
 brew bundle check                # "The Brewfile's dependencies are satisfied."
-git config user.email            # nick@trampoline.agency
+git config user.name             # the name you passed
+git config user.email            # the email you passed
 zsh -i -c 'python --version'     # Python 3.14.x
 zsh -i -c 'type python3 pip3 cc' # all three reported as aliases
 ```

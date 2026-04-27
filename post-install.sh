@@ -4,15 +4,18 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Wire ~/.gitconfig to include this repo's gitconfig (which holds user identity).
-GITCONFIG_PATH="$SCRIPT_DIR/gitconfig"
-if git config --global --get-all include.path 2>/dev/null | grep -qF "$GITCONFIG_PATH"; then
-  echo "git include.path already pointing at $GITCONFIG_PATH — skipping."
+# Set global git identity. Identity isn't stored in this repo (it's public);
+# pass values via env vars on first run, or skip if already configured.
+if [ -n "${GIT_NAME:-}" ] && [ -n "${GIT_EMAIL:-}" ]; then
+  git config --global user.name "$GIT_NAME"
+  git config --global user.email "$GIT_EMAIL"
+  echo "Set global git identity to $GIT_NAME <$GIT_EMAIL>."
+elif [ -n "$(git config user.name 2>/dev/null)" ] && [ -n "$(git config user.email 2>/dev/null)" ]; then
+  echo "git identity already set ($(git config user.name) <$(git config user.email)>) — skipping."
 else
-  git config --global --add include.path "$GITCONFIG_PATH"
-  echo "Registered $GITCONFIG_PATH as a git include."
+  echo "ERROR: git identity not set. Re-run with:"
+  echo "  GIT_NAME='Your Name' GIT_EMAIL='you@example.com' ./post-install.sh"
+  exit 1
 fi
 
 ZSHRC="$HOME/.zshrc"
